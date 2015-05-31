@@ -32,5 +32,7 @@ email settings from Teamcity using Teamcity open API.
 ## Troubleshooting
 The most common error is invalid SMTP configuration. Check teamcity-server.log for details.
 
+If log files contains timeout exception it is possible that you need to enable tls connection.
+
 
 

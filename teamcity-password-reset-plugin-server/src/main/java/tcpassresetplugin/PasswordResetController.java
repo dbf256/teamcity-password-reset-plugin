@@ -254,6 +254,8 @@ public class PasswordResetController extends BaseController {
             sender.setPassword(config.getPassword());
             props.setProperty("mail.password", config.getPassword());
         }
+        props.put("mail.smtp.timeout", "10000");
+        props.put("mail.smtp.connectiontimeout", "10000");
         sender.setJavaMailProperties(props);
         return sender;
     }
