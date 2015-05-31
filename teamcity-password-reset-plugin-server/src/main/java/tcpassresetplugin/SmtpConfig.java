@@ -13,6 +13,7 @@ public class SmtpConfig {
     private String password;
     private String fromAddress;
     private Boolean tls;
+    private Boolean ssl;
 
     public Integer getPort() {
         return port;
@@ -62,6 +63,14 @@ public class SmtpConfig {
         this.tls = tls;
     }
 
+    public Boolean isSsl() {
+        return ssl;
+    }
+
+    public void setSsl(Boolean ssl) {
+        this.ssl = ssl;
+    }
+
     @Override
     public String toString() {
         return "SmtpConfig{" +
@@ -71,9 +80,9 @@ public class SmtpConfig {
                 ", password='" + password + '\'' +
                 ", fromAddress='" + fromAddress + '\'' +
                 ", tls=" + tls +
+                ", ssl=" + ssl +
                 '}';
     }
-
 
     public String toSafeString() {
         return "SmtpConfig{" +
@@ -83,6 +92,7 @@ public class SmtpConfig {
                 ", password='" + (isEmpty(password) ? "" : "**********") + '\'' +
                 ", fromAddress='" + fromAddress + '\'' +
                 ", tls=" + tls +
+                ", ssl=" + ssl +
                 '}';
     }
 

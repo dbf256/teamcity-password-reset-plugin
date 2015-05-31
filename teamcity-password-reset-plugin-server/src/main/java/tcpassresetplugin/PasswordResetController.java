@@ -245,7 +245,15 @@ public class PasswordResetController extends BaseController {
         sender.setHost(config.getHost());
         sender.setPort(config.getPort());
         Properties props = new Properties();
-        props.put("mail.smtp.starttls.enable", config.isTls());
+        if (config.isTls()) {
+            props.put("mail.smtp.starttls.enable", true);
+        }
+        if (config.isSsl()) {
+            props.put("mail.smtp.starttls.enable", false);
+            props.put("mail.smtp.auth", true);
+            props.put("mail.smtp.quitwait", false);
+            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        }
         if (!isEmpty(config.getUsername())) {
             sender.setUsername(config.getUsername());
             props.setProperty("mail.user", config.getUsername());

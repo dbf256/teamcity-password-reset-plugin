@@ -47,6 +47,7 @@ public class SmtpConfigProcessor implements MainConfigProcessor {
             config.setPassword(smtpElement.getAttributeValue("password"));
             config.setFromAddress(smtpElement.getAttributeValue("fromAddress"));
             config.setTls("true".equals(smtpElement.getAttributeValue("tls")));
+            config.setSsl("true".equals(smtpElement.getAttributeValue("ssl")));
             String portValue = smtpElement.getAttributeValue("port");
             try {
                 config.setPort(Integer.valueOf(portValue));
@@ -75,6 +76,7 @@ public class SmtpConfigProcessor implements MainConfigProcessor {
         smtpElement.setAttribute("tls", String.valueOf(config.isTls()));
         smtpElement.setAttribute("port", String.valueOf(config.getPort()));
         smtpElement.setAttribute("host", config.getHost());
+        smtpElement.setAttribute("ssl", String.valueOf(config.isSsl()));
         container.addContent(smtpElement);
         element.addContent(container);
         logger.info("Config was saved: " + config.toSafeString());
