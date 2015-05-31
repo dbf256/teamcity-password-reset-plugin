@@ -9,19 +9,19 @@ This plugin allows you to reset your password in Teamcity. Just click "Reset pas
 - Add email configuration: to the root element (&lt;server&gt;) in %TEAMCITY_DATA_PATH%\config\main-config.xml add this section:
 
 ```
-<password-reset-plugin><smtp  port="<port>" host="<host>" username="<email login>" password="<email password>" fromAddress="<from address>" tls="<true or false>" />
+<password-reset-plugin><smtp  port="<port>" host="<host>" username="<email login>" password="<email password>" fromAddress="<from address>" tls="<true or false>" /></password-reset-plugin>
 ```
 
 for example
 
 ```
-<password-reset-plugin><smtp  port="25" host="smtp.mailgun.com" username="mail@domain.com" password="trustno1" fromAddress="mail@domain.com" tls="false" />
+<password-reset-plugin><smtp  port="25" host="smtp.mailgun.com" username="mail@domain.com" password="trustno1" fromAddress="mail@domain.com" tls="false" /></password-reset-plugin>
 ```
 
 or
 
 ```
-<password-reset-plugin><smtp  port="587" host="smtp.gmail.com" username="mail@domain.com" password="trustno1" fromAddress="mail@domain.com" tls="true" />
+<password-reset-plugin><smtp  port="587" host="smtp.gmail.com" username="mail@domain.com" password="trustno1" fromAddress="mail@domain.com" tls="true" /></password-reset-plugin>
 ```
 
 Don't like this manual setup? I don't like it too! But it is not possible (or I don't know how) to fetch global
