@@ -3,7 +3,7 @@
 This plugin allows you to reset your password in Teamcity. Just click "Reset password" at login screen.
 
 ## Install
-- Build plugin from source or download binary:  
+- Build plugin from source or [download binary](https://bintray.com/artifact/download/dbf/teamcity-password-reset-plugin/teamcity-password-reset-plugin.zip)
 - Shut down Teamcity 
 - Copy plugin to %TEAMCITY_DATA_PATH%\plugins directory
 - Add email configuration: to the root element (&lt;server&gt;) in %TEAMCITY_DATA_PATH%\config\main-config.xml add this section:
