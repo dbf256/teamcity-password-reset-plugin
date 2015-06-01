@@ -58,11 +58,11 @@ public class SmtpConfigProcessor implements MainConfigProcessor {
             logger.info("Loaded config: " + config.toSafeString());
             Collection<String> errors = config.getErrors();
             if (!errors.isEmpty()) {
-                logger.error("Config is not valid: " + Joiner.on(",").join(errors));
+                logger.error("Config is not valid: " + Joiner.on(", ").join(errors));
             }
             Collection<String> warnings = config.getWarnings();
             if (!warnings.isEmpty()) {
-                logger.warn("Config could be not valid: " + Joiner.on(",").join(warnings));
+                logger.warn("Config could be not valid: " + Joiner.on(", ").join(warnings));
             }
         }
     }

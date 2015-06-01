@@ -1,5 +1,6 @@
 package tcpassresetplugin;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.intellij.openapi.diagnostic.Logger;
@@ -23,10 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.Date;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
+
 import static org.apache.commons.lang.StringUtils.isEmpty;
 
 public class PasswordResetController extends BaseController {
@@ -176,15 +175,8 @@ public class PasswordResetController extends BaseController {
             addError("You need to specify email", params);
             return new ModelAndView(pluginDescriptor.getPluginResourcesPath(Common.JSP_PASSWORD_RESET_REQUEST), params);
         } else {
-            // it is not possible to find user by email
-            UserSet<SUser> users = userModel.getAllUsers();
             Map<String,Object> params = buildParams();
-            Set<SUser> usersByEmail = Sets.newHashSet();
-            for (SUser user : users.getUsers()) {
-                if (email.equalsIgnoreCase(user.getEmail())) {
-                    usersByEmail.add(user);
-                }
-            }
+            Set<SUser> usersByEmail = getUsersByEmail(email);
             logger.info(usersByEmail.size() + " user(s) were found for " + email);
             if (usersByEmail.isEmpty()) {
                 addError("No users with email " + email + " were found.", params);
@@ -210,7 +202,26 @@ public class PasswordResetController extends BaseController {
         }
     }
 
+    @NotNull
+    private Set<SUser> getUsersByEmail(String email) {
+        // it is not possible to find user by email
+        UserSet<SUser> users = userModel.getAllUsers();
+        Set<SUser> usersByEmail = Sets.newHashSet();
+        for (SUser user : users.getUsers()) {
+            if (email.equalsIgnoreCase(user.getEmail())) {
+                usersByEmail.add(user);
+            }
+        }
+        return usersByEmail;
+    }
+
     private void sendMail(Set<SUser> usersToMail) throws Exception {
+        Collection<String> errors = smtpConfigProcessor.getConfig().getErrors();
+        if (!errors.isEmpty()) {
+            String message = "Failed to send message, SMTP config is not valid: " + Joiner.on(", ").join(errors);
+            logger.error(message);
+            throw new RuntimeException(message);
+        }
         for (SUser user : usersToMail) {
             sendMail(user);
         }
@@ -229,17 +240,15 @@ public class PasswordResetController extends BaseController {
         }
     }
 
-    @NotNull
     private MimeMessage buildMessage(SUser user, SmtpConfig config, JavaMailSenderImpl sender) throws MessagingException {
         MimeMessage message = sender.createMimeMessage();
-        message.setFrom(new InternetAddress(config.getFromAddress()));
+        message.setFrom(config.getFromAddress());
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
         message.setSubject("TeamCity password reset");
         message.setText(getMessageBody(user));
         return message;
     }
 
-    @NotNull
     private JavaMailSenderImpl buildSender(SmtpConfig config) {
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
         sender.setHost(config.getHost());
@@ -281,7 +290,6 @@ public class PasswordResetController extends BaseController {
         return new BigInteger(130, random).toString(32);
     }
 
-    @NotNull
     private ModelAndView processResetRequestAction() {
         Map<String,Object> params = buildParams();
         return new ModelAndView(pluginDescriptor.getPluginResourcesPath(Common.JSP_PASSWORD_RESET_REQUEST), params);

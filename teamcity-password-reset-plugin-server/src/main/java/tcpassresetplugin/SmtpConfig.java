@@ -89,7 +89,7 @@ public class SmtpConfig {
                 "port=" + port +
                 ", host='" + host + '\'' +
                 ", username='" + username + '\'' +
-                ", password='" + (isEmpty(password) ? "" : "**********") + '\'' +
+                ", password='" + "**********" + '\'' +
                 ", fromAddress='" + fromAddress + '\'' +
                 ", tls=" + tls +
                 ", ssl=" + ssl +
